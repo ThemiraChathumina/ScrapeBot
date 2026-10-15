@@ -13,7 +13,7 @@ import smtplib
 from email.message import EmailMessage
 
 
-def send_matches(matches):
+def send_matches(matches, subject=None):
     user = os.environ["SMTP_USER"]
     password = os.environ["SMTP_PASSWORD"]
     recipients = os.environ.get("EMAIL_TO") or user
@@ -22,7 +22,7 @@ def send_matches(matches):
 
     message = EmailMessage()
     count = len(matches)
-    message["Subject"] = f"ikman: {count} new room/annex ad{'s' if count != 1 else ''} in your range"
+    message["Subject"] = subject or f"ikman: {count} new room/annex ad{'s' if count != 1 else ''} in your range"
     message["From"] = user
     message["To"] = recipients
     message.set_content(_plain(matches))

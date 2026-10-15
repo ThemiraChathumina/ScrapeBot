@@ -34,7 +34,10 @@ flooded with old listings.
    - `SMTP_USER`: your Gmail address
    - `SMTP_PASSWORD`: the app password from step 1
    - `EMAIL_TO`: where alerts go (optional; defaults to `SMTP_USER`; comma-separate several)
-3. **Actions** tab → *ikman room alert* → **Run workflow** to do the first run now.
+3. **Actions** tab → *ikman room alert* → **Run workflow**, tick **Only send a test email**,
+   and run it. You should get an email titled "ikman bot: test email". If the run fails,
+   check the secrets.
+4. **Run workflow** again with the box unticked to do the first real run.
 
 After that it runs every hour by itself (GitHub may start scheduled runs a few minutes late).
 Hourly runs use about 720 of the 2,000 free Actions minutes per month on a private repo.
@@ -50,7 +53,7 @@ python main.py --dry-run --ignore-seen --lookback-hours 72
 
 `--dry-run` prints what would be emailed without sending anything or touching the state file.
 To test the email for real, set `SMTP_USER`, `SMTP_PASSWORD` (and optionally `EMAIL_TO`)
-as environment variables and run without `--dry-run`.
+as environment variables and run `python main.py --test-email`.
 
 ## Notes
 

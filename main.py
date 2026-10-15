@@ -9,6 +9,7 @@ Usage:
   python main.py                      normal run
   python main.py --dry-run            print matches, send nothing, save nothing
   python main.py --dry-run --ignore-seen --lookback-hours 72   test on recent ads
+  python main.py --test-email         send a sample email to check SMTP settings
 """
 import argparse
 import json
@@ -95,7 +96,24 @@ def evaluate(ad, config):
     }, None
 
 
+def send_test_email():
+    """Send one sample alert to check the SMTP settings. Does not scrape or touch state."""
+    sample = {
+        "title": "TEST - Sample annex for rent (not a real ad)",
+        "price": "Rs 35,000 /month",
+        "location": "Colombo",
+        "posted": datetime.now(SRI_LANKA).strftime("%d %b %Y %I:%M %p"),
+        "url": "https://ikman.lk/en/ads/colombo/room-annex-rentals",
+        "snippet": "If you received this, scrapeBot can send you email alerts.",
+    }
+    notifier.send_matches([sample], subject="ikman bot: test email")
+    log.info("Test email sent")
+
+
 def run(args):
+    if args.test_email:
+        send_test_email()
+        return
     config = yaml.safe_load((ROOT / "config.yaml").read_text(encoding="utf-8"))
     state_path = ROOT / config["state_file"]
     state = load_state(state_path)
@@ -151,6 +169,7 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="print matches; no email, no state changes")
     parser.add_argument("--ignore-seen", action="store_true", help="treat every ad as unseen")
     parser.add_argument("--lookback-hours", type=int, help="override lookback_hours from config.yaml")
+    parser.add_argument("--test-email", action="store_true", help="only send a sample email to check SMTP settings")
     args = parser.parse_args()
 
     sys.stdout.reconfigure(encoding="utf-8")
