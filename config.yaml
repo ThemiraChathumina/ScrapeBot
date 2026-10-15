@@ -1,0 +1,66 @@
+# Search results to watch. Keep sort=date&order=desc so the newest ads come first.
+search_url: "https://ikman.lk/en/ads/colombo/room-annex-rentals?sort=date&order=desc&buy_now=0&urgent=0&money.price.minimum=30000&money.price.maximum=40000&enum.item_type=portion,annex,house,apartment,other"
+
+# Monthly rent in Rs: min <= price < max
+price:
+  min: 30000
+  max: 40000
+
+# Skip an ad if its title or description contains any of these (case-insensitive,
+# substring match, so "girl" also catches "girls").
+exclude_keywords:
+  # English
+  - lady
+  - ladies
+  - female
+  - girl
+  - woman
+  - women
+  # Sinhala
+  - කාන්තා      # woman / ladies
+  - ගැහැණු      # female
+  - ගෑනු        # female (colloquial)
+  - ලේඩීස්      # "ladies"
+  - ගර්ල්ස්     # "girls"
+  - යුවති       # young women
+  - ශිෂ්‍යා      # female student
+  - කෙල්ල       # girl (colloquial)
+  - දැරිය       # girl
+
+# Phrases meaning "open to both" - removed before the keyword check above, so
+# "only one girl or boy" does not exclude an ad. Other mentions still count.
+allow_phrases:
+  - girl or boy
+  - boy or girl
+  - girls or boys
+  - boys or girls
+  - girls and boys
+  - boys and girls
+  - girl/boy
+  - boy/girl
+  - girls/boys
+  - boys/girls
+  - male or female
+  - female or male
+  - male/female
+  - female/male
+  - ladies or gents
+  - gents or ladies
+  - ladies and gents
+  - gents and ladies
+  - ladies/gents
+  - gents/ladies
+  - ගැහැණු හෝ පිරිමි   # female or male
+  - පිරිමි හෝ ගැහැණු   # male or female
+
+# Only consider ads created within this many hours (safety net if runs are missed).
+lookback_hours: 24
+
+# Read further pages only while they still contain ads newer than lookback_hours.
+max_pages: 3
+
+# Pause between requests to ikman.
+request_delay_seconds: 2
+
+state_file: state/seen.json
+seen_retention_days: 14
